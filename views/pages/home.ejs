@@ -1,0 +1,35 @@
+<div class="container">
+    <h2 class="my-5">All Accounts</h2>
+<form class="row" action="/home/addaccount" method="post">
+        <div class="col-md-8">
+          <input type="text" class="form-control" id="inputPassword2" name="accountname" placeholder="Enter new account name">
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-primary mb-3">Create Account</button>
+        </div>
+</form>
+<table class="table">
+    <thead class="thred-dark">
+        <tr>
+            <th scope="col">Account-Name</th>
+            <th colspan="3" class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr> 
+            <td>
+                Account name
+            </td>
+            <td>
+                <i class="far fa-edit">Edit</i>                                 
+            </td>
+             <td>
+                <i class="fas fa-trash ps-4">Delete</i>
+             </td>  
+            <td>
+                <a href="" class="btn btn-primary btn-sm mx-4"  type="submit" role="button">More Details <i class="fas fa-angle-double-right"></i></a>
+            </td>
+        </tr>
+</tbody>
+</table>
+</div>

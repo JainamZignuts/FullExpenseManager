@@ -46,15 +46,14 @@ userSignup = async (req, res) => {
         email: req.body.email,
         password: hash,
       }).fetch();
-      res.status(rescode.CREATED);
-      res.send(
-            msg1('UserCreated', lang) +
-              '\n' +
-              msg1('WelcomeEmail', lang) +
-              '\n' +
-              msg1('DefaultAccount', lang)
-      );
-
+      // res.status(rescode.CREATED);
+      // res.send(
+      //       msg1('UserCreated', lang) +
+      //         '\n' +
+      //         msg1('WelcomeEmail', lang) +
+      //         '\n' +
+      //         msg1('DefaultAccount', lang)
+      // );
     }
   } catch (error) {
     console.log(error);
@@ -106,10 +105,12 @@ userLogin = async (req, res) => {
         await Users.updateOne({ id: users.id }).set({
           token: token,
         });
-        return res.status(rescode.OK).json({
-          message: msg1('Login', lang),
-          token: token,
-        });
+        res.cookie('token', token, { maxAge: 900000});
+        return res.redirect('/home');
+        // return res.status(rescode.OK).json({
+        //   message: msg1('Login', lang),
+        //   token: token,
+        // });
       }
       res.status(rescode.UNAUTHORIZED).json({
         message: msg1('AuthError', lang),
@@ -135,9 +136,11 @@ userLogout = async (req, res) => {
     await Users.updateOne({ id: req.userData.userId }).set({
       token: null,
     });
-    res.status(rescode.OK).json({
-      message: msg1('Logout', lang),
-    });
+    res.clearCookie('token');
+    res.redirect('/');
+    // res.status(rescode.OK).json({
+    //   message: msg1('Logout', lang),
+    // });
   } catch (error) {
     console.log(error);
     res.status(rescode.SERVER_ERROR).json({

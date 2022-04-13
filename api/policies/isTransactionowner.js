@@ -10,7 +10,7 @@ const msg1 = sails.config.getMessages;
 module.exports = async (req, res, proceed) => {
   const lang = req.getLocale();
   try {
-    const id = req.params.id;
+    const id = req.params.transid;
     //find transaction from the id from url
     let result = await Transactions.findOne({ id: id });
     if(result){

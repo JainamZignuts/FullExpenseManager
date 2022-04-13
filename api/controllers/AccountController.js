@@ -16,11 +16,12 @@ const msg1 = sails.config.getMessages;
 getAccounts = async (req, res) => {
   try {
     //get all account's details associated with logged in user.
-    let result = await Users.find({
+    let result = await Users.findOne({
       where: { id: req.userData.userId },
       select: ['email', 'firstname', 'lastname'],
     }).populate('accounts');
-    res.status(rescode.OK).json(result);
+    res.status(rescode.OK);
+    res.view('pages/home',{result});
   } catch (error) {
     console.log(error);
     res.status(rescode.SERVER_ERROR).json({
@@ -70,16 +71,24 @@ createAccount = async (req, res) => {
       accountname: accname,
       owners: req.userData.userId,
     }).fetch();
-    res.status(rescode.CREATED).json({
-      message: msg('AccountCreated', lang),
-      result,
-    });
+    // res.status(rescode.CREATED).json({
+    //   message: msg('AccountCreated', lang),
+    //   result,
+    // });
+    res.redirect('/home');
   } catch (error) {
     console.log(error);
     res.status(rescode.SERVER_ERROR).json({
       error: error,
     });
   }
+};
+
+getUpdateAccount = async (req, res) => {
+  const id = req.params.accid;
+  let result = await Account.findOne({id:id});
+  res.status(rescode.OK);
+  res.view('pages/updateAccount', {result});
 };
 
 /**
@@ -99,10 +108,11 @@ updateAccount = async (req, res) => {
     let result = await Account.updateOne({ id: id }).set({
       accountname: req.body.accountname.trim(),
     });
-    res.status(rescode.OK).json({
-      message: msg1('AccountUpdated', lang),
-      result,
-    });
+    // res.status(rescode.OK).json({
+    //   message: msg1('AccountUpdated', lang),
+    //   result,
+    // });
+    res.redirect('/home');
   } catch (error) {
     console.log(error);
     res.status(rescode.SERVER_ERROR).json({
@@ -124,9 +134,10 @@ deleteAccount = async (req, res) => {
     let record = await Transactions.destroy({ owneraccount: id }).fetch();
     //deletes the requested account
     let result = await Account.destroyOne({ id: id });
-    res.status(rescode.OK).json({
-      message: msg1('AccountDeleted', lang),
-    });
+    // res.status(rescode.OK).json({
+    //   message: msg1('AccountDeleted', lang),
+    // });
+    res.redirect('/home');
   } catch (error) {
     console.log(error);
     res.status(rescode.SERVER_ERROR).json({
@@ -139,6 +150,7 @@ module.exports = {
   getAccounts,
   getParticularAccount,
   createAccount,
+  getUpdateAccount,
   updateAccount,
   deleteAccount,
 };

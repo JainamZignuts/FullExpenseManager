@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="form-title-signup text-center">
+        <h2 class="text-dark my-5">Update Transaction Form</h2>
+      </div>
+      <form action="/home/transaction/update/<%= record.id %>" method="post">
+        <div class="mb-3">
+          <label for="type" class="form-label">Transaction Type</label>
+          <select class="form-select" name="type" id="type">
+            <option value="<%= record.type %> " selected><%= record.type %> </option>
+            <% if(record.type === "expense"){%>
+                <option value="Income">Income</option>
+                <%} else{%>
+                <option value="Expense">Expense</option>
+                <% } %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" name="description" id="description" rows="3"><%= record.description %></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="mb-2" for="amount">Amount</label>
+          <input class="form-control" name="amount" id="amount" type="text" value="<%= record.amount %>" required/>
+        </div>
+        <br>
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary mb-3">Update</button>
+        </div>
+      </form>
+</div>

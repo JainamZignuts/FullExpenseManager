@@ -19,13 +19,40 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': { view: 'pages/homepage' },
-  '/signup': { view: 'pages/signup' },
-  '/login': { view: 'pages/login' },
+  '/': {
+    view: 'pages/homepage',
+    locals: {
+      layout: 'layouts/prelayout'
+    }
+  },
+  '/signup': {
+    view: 'pages/signup',
+    locals: {
+      layout: 'layouts/prelayout'
+    }
+  },
+  '/login': {
+    view: 'pages/login',
+    locals: {
+      layout: 'layouts/prelayout'
+    }
+  },
+  'GET /logout' : 'UsersController.userLogout',
   '/home': { view: 'pages/home' },
   '/home/updateaccount': { view: 'pages/updateAccount' },
+  'GET /home' : 'AccountController.getAccounts',
   'POST /signup' : 'UsersController.userSignup',
   'POST /login' : 'UsersController.userLogin',
+  'POST /home/addaccount' : 'AccountController.createAccount',
+  'GET /home/updateaccount/:accid' : 'AccountController.getUpdateAccount',
+  'POST /home/updateaccount/:accid' : 'AccountController.updateAccount',
+  'GET /home/deleteaccount/:accid' : 'AccountController.deleteAccount',
+  'GET /home/addmember/:accid' : 'MemberController.getAddMember',
+  'POST /home/addmember/:accid' : 'MemberController.addMembers',
+  'GET /home/transaction/create/:accid' : 'TransactionsController.getAddTransaction',
+  'POST /home/transaction/create/:accid' : 'TransactionsController.createTransaction',
+  'GET /home/transaction/update/:transid' : 'TransactionsController.getUpdateTransaction',
+  'POST /home/transaction/update/:transid' : 'TransactionsController.updateTransaction',
 
 
   /***************************************************************************

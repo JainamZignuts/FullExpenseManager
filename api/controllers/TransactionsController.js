@@ -6,8 +6,32 @@
  */
 
 const rescode = sails.config.constants.httpStatusCode;
-const msg = sails.config.messages.Transaction;
-const msg1 = sails.config.getMessages;
+const msg = sails.config.getMessages;
+
+getAddTransaction = async (req, res) => {
+  try {
+    let id = req.params.accid;
+    let result = await Account.findOne({id:id});
+    res.status(rescode.OK);
+    res.view('pages/addTransaction', {result});
+  } catch (error) {
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
+  }
+};
+
+getUpdateTransaction = async (req, res) => {
+  try {
+    const id = req.params.transid;
+    let record = await Transactions.findOne({id:id});
+    console.log(record);
+    res.status(rescode.OK);
+    res.view('pages/updateTransaction', {record});
+  } catch (error) {
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
+  }
+};
 
 /**
   * Display all transactions for a particular account
@@ -29,7 +53,7 @@ getTransactions = async (req, res) => {
     } else {
       //if there isn't any transaction yet
       res.status(rescode.NOT_FOUND).json({
-        message: msg1('TransactionNotFound', lang)
+        message: msg('TransactionNotFound', lang)
       });
     }
   } catch (error) {
@@ -49,10 +73,12 @@ createTransaction = async (req, res) => {
   const lang = req.getLocale();
   try {
     //gets account details
-    let accountData = await Account.findOne({ id: req.params.id });
+    let accountData = await Account.findOne({ id: req.params.accid });
     //gets account's current balance
     let balance = accountData.balance;
     let { description, amount } = req.body;
+    console.log(description);
+    console.log(amount);
     const type = req.body.type.toLowerCase();
     //checks for input amount
     if(amount > 0){
@@ -60,7 +86,7 @@ createTransaction = async (req, res) => {
     } else {
       //if amount is negative sends error
       return res.status(rescode.BAD_REQUEST).json({
-        error: msg1('InvalidAmount', lang)
+        error: msg('InvalidAmount', lang)
       });
     }
     //checks the type of transaction
@@ -71,7 +97,7 @@ createTransaction = async (req, res) => {
     } else {
       //if type is other than income or expense
       return res.status(rescode.BAD_REQUEST).json({
-        error: msg1('InvalidType', type)
+        error: msg('InvalidType', type)
       });
     }
     //creates the transaction
@@ -83,17 +109,16 @@ createTransaction = async (req, res) => {
       user: req.userData.userId
     }).fetch();
     //updates balance in account
-    let upd = await Account.updateOne({ id: req.params.id })
+    let upd = await Account.updateOne({ id: req.params.accid })
      .set({ balance: balance });
     res.status(rescode.OK).json({
-      message: msg1('TransactionCreated', lang),
+      message: msg('TransactionCreated', lang),
       result: result,
       account: upd,
     });
   } catch (error) {
-    res.status(rescode.SERVER_ERROR).json({
-      error: error,
-    });
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
   }
 };
 
@@ -105,20 +130,21 @@ createTransaction = async (req, res) => {
 updateTransaction = async (req, res) => {
   const lang = req.getLocale();
   try {
-    const id = req.params.id;
+    const id = req.params.transid;
     let result = await Transactions.findOne({ id: id });
     let data = await Account.findOne({ id: result.owneraccount });
     //gets current balance from account
     let balance = data.balance;
     let { description, amount } = req.body;
     let type = req.body.type.toLowerCase();
+    console.log(type);
     //checks for input amount
     if(amount >= 0){
       amount = amount;
     } else {
       //if amount is negative sends error
       return res.status(rescode.BAD_REQUEST).json({
-        error: msg1('InvalidAmount', lang)
+        error: msg('InvalidAmount', lang)
       });
     }
     //checks the type of transaction from input
@@ -127,7 +153,7 @@ updateTransaction = async (req, res) => {
     } else {
       //if type is other than income or expense
       return res.status(rescode.BAD_REQUEST).json({
-        error: msg1('InvalidType', lang)
+        error: msg('InvalidType', lang)
       });
     }
     //gets existing transaction's type
@@ -161,7 +187,7 @@ updateTransaction = async (req, res) => {
     let upd = await Account.updateOne({ id: result.owneraccount })
      .set({ balance: balance });
     res.status(rescode.OK).json({
-      message: msg1('TransactionUpdate', lang),
+      message: msg('TransactionUpdate', lang),
       record: record,
       upd: upd
     });
@@ -198,7 +224,7 @@ deleteTransaction = async (req, res) => {
     //deletes the transaction
     let del = await Transactions.destroyOne({ id: id });
     res.status(rescode.OK).json({
-      message: msg1('TransactionDeleted', lang),
+      message: msg('TransactionDeleted', lang),
       account:record,
       DeletedTransaction: del
     });
@@ -210,6 +236,8 @@ deleteTransaction = async (req, res) => {
 };
 
 module.exports = {
+  getAddTransaction,
+  getUpdateTransaction,
   getTransactions,
   createTransaction,
   updateTransaction,

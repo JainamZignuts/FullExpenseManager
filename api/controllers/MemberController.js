@@ -9,6 +9,18 @@ const rescode = sails.config.constants.httpStatusCode;
 const msg = sails.config.messages.Member;
 const msg1 = sails.config.getMessages;
 
+getAddMember = async (req, res) => {
+  try {
+    const id = req.params.accid;
+    let record = await Account.findOne({id:id});
+    res.status(rescode.OK);
+    res.view('pages/addMember',{record});
+  } catch (error) {
+    res.status(rescode.SERVER_ERROR);
+    res.view('500',{error});
+  }
+};
+
 /**
   * Adds member to a particular account with user's email
   *
@@ -99,6 +111,7 @@ deleteMembers = async (req, res) => {
 };
 
 module.exports = {
+  getAddMember,
   addMembers,
   deleteMembers,
 };

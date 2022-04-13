@@ -17,6 +17,23 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': true,
-
+  '*': 'getLang',
+  UsersController: {
+    'userLogout' : ['getLang','isAuthenticated'],
+  },
+  MemberController: {
+    '*': ['getLang','isAuthenticated','isAccountuser']
+  },
+  AccountController: {
+    '*': ['getLang','isAuthenticated'],
+    'getParticularAccount': ['getLang','isAuthenticated', 'isAccountuser'],
+    'updateAccount': ['getLang','isAuthenticated', 'isAccountuser'],
+    'deleteAccount': ['getLang','isAuthenticated', 'isAccountuser']
+  },
+  TransactionsController: {
+    'getTransactions': ['getLang','isAuthenticated', 'isAccountuser'],
+    'createTransaction': ['getLang','isAuthenticated', 'isAccountuser'],
+    'updateTransaction': ['getLang','isAuthenticated', 'isTransactionowner'],
+    'deleteTransaction' : ['getLang','isAuthenticated', 'isTransactionowner'],
+  }
 };

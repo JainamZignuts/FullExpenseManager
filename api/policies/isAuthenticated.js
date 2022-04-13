@@ -12,7 +12,8 @@ module.exports = async (req, res, proceed) => {
   try {
     //get token from headers with 1st part that splitted with whitespace
     //eg. Bearer 'TOKEN'
-    const token = req.headers.authorization.split(' ')[1];
+    // const token = req.headers.authorization.split(' ')[1];
+    const token = req.cookies.token;
 
     //verify token
     const decoded = jwt.verify(token, process.env.JWT_KEY);

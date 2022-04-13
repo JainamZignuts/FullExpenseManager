@@ -1,8 +1,27 @@
 <div class="container">
     <div class="form-title-signup text-center">
-        <h2 class="text-dark my-5">Add Transaction Form</h2>
+        <h2 class="text-dark my-5">Add Transaction Form for <b><u><%= result.accountname %></u></b>  </h2>
       </div>
-      <form action="" method="post">
-       
+      <form action="/home/transaction/create/<%= result.id %>" method="post">
+        <div class="mb-3">
+          <label for="type" class="form-label">Transaction Type</label>
+          <select class="form-select" name="type" id="type">
+            <option selected>Choose...</option>
+            <option value="Income">Income</option>
+            <option value="Expense">Expense</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" name="description" id="description" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="mb-2" for="amount">Amount</label>
+          <input class="form-control" name="amount" id="amount" type="number" placeholder="Enter Amount" required/>
+        </div>
+        <br>
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary mb-3">Add</button>
+        </div>
       </form>
 </div>

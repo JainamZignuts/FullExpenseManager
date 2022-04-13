@@ -16,20 +16,30 @@
         </tr>
     </thead>
     <tbody>
+        <% if(result.accounts.length > 0) { result.accounts.forEach(function(data) { %> 
         <tr> 
             <td>
-                Account name
+                <%= data.accountname %> 
             </td>
             <td>
-                <i class="far fa-edit">Edit</i>                                 
+                <a href="/home/updateaccount/<%= data.id %>" class="link-info"><i class="far fa-edit">Edit</i></a>                                 
             </td>
              <td>
-                <i class="fas fa-trash ps-4">Delete</i>
+                <a href="/home/deleteaccount/<%= data.id %>" class="link-danger"><i class="fas fa-trash ps-4">Delete</i></a>
              </td>  
             <td>
-                <a href="" class="btn btn-primary btn-sm mx-4"  type="submit" role="button">More Details <i class="fas fa-angle-double-right"></i></a>
+                <a href="/home/accountdetails" class="btn btn-primary btn-sm mx-4"  type="submit" role="button">More Details <i class="fas fa-angle-double-right"></i></a>
             </td>
         </tr>
+        <% }) %>
+        <% } else { %>
+            <tr>
+                <td class="text-center text-danger" colspan="4">Oops... There isn't any account for this user.
+                    <br />Please create an account first by filling the form located above table<br /><br/>
+                </td>
+            </tr>
+        <% } %> 
+
 </tbody>
 </table>
 </div>

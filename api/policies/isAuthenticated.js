@@ -40,6 +40,7 @@ module.exports = async (req, res, proceed) => {
       return res.send(msg1('TokenExpired', lang));
     } else {
       return res.status(rescode.UNAUTHORIZED).json({
+        hi:err,
         message: msg1('AuthError', lang),
       });
     }

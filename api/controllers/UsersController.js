@@ -46,7 +46,8 @@ userSignup = async (req, res) => {
         email: req.body.email,
         password: hash,
       }).fetch();
-      // res.status(rescode.CREATED);
+      res.status(rescode.CREATED);
+      res.redirect('/login');
       // res.send(
       //       msg1('UserCreated', lang) +
       //         '\n' +
@@ -105,7 +106,7 @@ userLogin = async (req, res) => {
         await Users.updateOne({ id: users.id }).set({
           token: token,
         });
-        res.cookie('token', token, { maxAge: 900000});
+        res.cookie('token', token, { maxAge:  7*24*60*60*1000});
         return res.redirect('/home');
         // return res.status(rescode.OK).json({
         //   message: msg1('Login', lang),

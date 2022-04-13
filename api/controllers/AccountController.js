@@ -41,7 +41,9 @@ getParticularAccount = async (req, res) => {
     let result = await Account.findOne({ id: req.params.accid })
        .populate('owners', { select: ['firstname', 'lastname', 'email'] })
        .populate('transactions');
-    res.status(rescode.OK).json(result);
+       console.log(result);
+    res.status(rescode.OK);
+    res.view('pages/accountDetails', {result});
   } catch (error) {
     console.log(error);
     res.status(rescode.SERVER_ERROR).json({

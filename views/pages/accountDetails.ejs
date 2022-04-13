@@ -1,0 +1,51 @@
+<div class="container">
+    <h2 class="my-5">Account Details</h2>
+    <h3>Balance = <%= result.balance %></h3>
+<table class="table">
+    <thead class="thred-dark">
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+            <th scope="col">Amount</th>
+            <th colspan="2" class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if(result.transactions.length > 0) { result.transactions.forEach(function(data) { %> 
+        <tr> 
+            <td>
+                <%= new Date(data.createdAt).toLocaleString() %> 
+            </td>
+            <td>
+                <%= data.type %>
+            </td>
+            <td>
+                <%= data.description %>
+            </td>
+            <td>
+                <%= data.amount %>
+            </td>
+            <td>
+                <a href="/home/updateaccount/<%= data.id %>" class="link-info"><i class="far fa-edit">Edit</i></a>                                 
+            </td>
+             <td>
+                <a href="/home/deleteaccount/<%= data.id %>" class="link-danger"><i class="fas fa-trash ps-4">Delete</i></a>
+             </td>  
+        </tr>
+        <% }) %>
+        <% } else { %>
+            <tr>
+                <td class="text-center text-danger" colspan="6">Oops... There isn't any Transactios in this account.
+                    <br />Please create a Transaction first by clicking add transaction button. <br /><br/>
+                </td>
+            </tr>
+        <% } %> 
+
+</tbody>
+</table>
+<a href="/home/transaction/create/<%= result.id %>">
+<button type="button" class="btn btn-primary mb-3">Create Transaction</button>
+</a>
+</form>
+</div>

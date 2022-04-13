@@ -27,12 +27,12 @@ module.exports = {
   fn: async function (inputs) {
     const nodemailer = require('nodemailer');
     var transport = nodemailer.createTransport({
-      host: 'smtp.mailtrap.io',
+      host: "smtp.mailtrap.io",
       port: 2525,
       auth: {
-        user: 'cfff83165f9b0f',
-        pass: '33f74670c14b0a',
-      },
+        user: "109a725098371d",
+        pass: "57a01b8c996a48"
+      }
     });
     //set email details
     var data = {

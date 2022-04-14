@@ -26,7 +26,7 @@ module.exports = {
     //reference to account
     accounts: {
       collection: 'account',
-      via: 'owners',
+      via: 'members',
       through: 'accountuser',
     },
   },
@@ -46,7 +46,8 @@ module.exports = {
       //creates user's default account
       let acc = await Account.create({
         accountname: users.firstname + ' default',
-        owners: users.id,
+        owner: users.id,
+        members: users.id,
       }).fetch();
     } catch (err) {
       console.log(err);

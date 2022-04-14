@@ -49,6 +49,7 @@ module.exports.routes = {
   'GET /home/deleteaccount/:accid' : 'AccountController.deleteAccount',
   'GET /home/addmember/:accid' : 'MemberController.getAddMember',
   'POST /home/addmember/:accid' : 'MemberController.addMembers',
+  'GET /home/deletemember/:accid/:uid' : 'MemberController.deleteMembers',
   'GET /home/transaction/create/:accid' : 'TransactionsController.getAddTransaction',
   'POST /home/transaction/create/:accid' : 'TransactionsController.createTransaction',
   'GET /home/transaction/update/:transid' : 'TransactionsController.getUpdateTransaction',

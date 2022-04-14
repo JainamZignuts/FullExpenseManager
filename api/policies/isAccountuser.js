@@ -12,11 +12,11 @@ module.exports = async (req, res, proceed) => {
   try {
     const id = req.params.accid;
     //finds account details with owners
-    let rec = await Account.findOne({ id: id }).populate('owners');
+    let rec = await Account.findOne({ id: id }).populate('members');
     if(rec){
       let uid = false;
       //loops through owners of accounts
-      for (data of rec.owners) {
+      for (data of rec.members) {
         //gets owners ids
         console.log(data.id);
         //matches it with logged in user

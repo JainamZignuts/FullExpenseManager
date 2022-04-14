@@ -39,9 +39,9 @@ getParticularAccount = async (req, res) => {
   try {
     //get particular account's details along with its transactions and owners.
     let result = await Account.findOne({ id: req.params.accid })
-       .populate('owners', { select: ['firstname', 'lastname', 'email'] })
+       .populate('members', { select: ['firstname', 'lastname', 'email'] })
+       .populate('owner')
        .populate('transactions', {sort: 'createdAt DESC'});
-    console.log(result);
     res.status(rescode.OK);
     res.view('pages/accountDetails', {result});
   } catch (error) {
@@ -71,7 +71,8 @@ createAccount = async (req, res) => {
     //creates an account
     let result = await Account.create({
       accountname: accname,
-      owners: req.userData.userId,
+      owner: req.userData.userId,
+      members: req.userData.userId,
     }).fetch();
     // res.status(rescode.CREATED).json({
     //   message: msg('AccountCreated', lang),

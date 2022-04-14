@@ -1,6 +1,6 @@
 module.exports = {
   attributes: {
-    owners: {
+    members: {
       model: 'users',
     },
     account: {

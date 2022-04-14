@@ -34,8 +34,8 @@ addMembers = async (req, res) => {
       //if user found
       //checks for existing member
       let data = await AccountUser.findOne({
-        account: req.params.id,
-        owners: record.id,
+        account: req.params.accid,
+        members: record.id,
       });
       if (data) {
         //if given user is member of thst account already
@@ -44,17 +44,16 @@ addMembers = async (req, res) => {
         });
       } else {
         //adds user to the account as member
-        await Account.addToCollection(req.params.id, 'owners').members([
+        await Account.addToCollection(req.params.accid, 'members').members([
           record.id,
         ]);
-        res.status(rescode.CREATED).json({
-          message: msg1('MemberAdded', lang),
-        });
+        res.status(rescode.CREATED);
+        res.redirect('/home/account/'+req.params.accid);
       }
     } else {
       //user does not exists in database
       return res.status(rescode.NOT_FOUND).json({
-        error: msg('UserNotExists', lang),
+        error: msg1('UserNotExists', lang),
       });
     }
   } catch (error) {
@@ -73,23 +72,22 @@ addMembers = async (req, res) => {
 deleteMembers = async (req, res) => {
   const lang = req.getLocale();
   try {
-    await Account.findOne({ id: req.params.id });
+    await Account.findOne({ id: req.params.accid });
     //find the user in database from input
-    let record = await Users.findOne({ email: req.body.email });
+    let record = await Users.findOne({ id: req.params.uid });
     if (record) {
       let data = await AccountUser.find({
-        account: req.params.id,
-        owners: record.id,
+        account: req.params.accid,
+        members: record.id,
       });
       if (data) {
         //if user is part of the account
         //removes the particular member from account.
-        await Account.removeFromCollection(req.params.id, 'owners').members([
+        await Account.removeFromCollection(req.params.accid, 'members').members([
           record.id,
         ]);
-        res.status(rescode.OK).json({
-          message: msg1('MemberDeleted', lang),
-        });
+        res.status(rescode.OK);
+        res.redirect('/home/account/'+req.params.accid);
       } else {
         //given user is not the member of that accoount
         res.status(rescode.NOT_FOUND).json({
@@ -105,7 +103,7 @@ deleteMembers = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(rescode.SERVER_ERROR).json({
-      error: err,
+      error: error,
     });
   }
 };

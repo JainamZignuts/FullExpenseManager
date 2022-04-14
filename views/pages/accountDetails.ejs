@@ -28,11 +28,13 @@
           </div>
     </div>
     <div id="trans">
+        <span> <h4>Owner : <%= result.owner.firstname + " " + result.owner.lastname %></h3>
     <% if (result.balance > 0) { %>
-        <h3 class="my-3" style="color: green;">Balance : <%= result.balance %></h3>
+        <h5 class="my-3" style="color: green;">Balance : <%= result.balance %></h3>
     <% } else { %>
-        <h3 class="my-3" style="color: red;">Balance : <%= result.balance %></h3>
+        <h5 class="my-3" style="color: red;">Balance : <%= result.balance %></h3>
     <% } %>
+</span>
 <table class="table table-bordered border-dark">
     <thead class="thred-dark fw-bolder">
         <tr>
@@ -88,25 +90,33 @@
             </tr>
         </thead>
         <tbody>
-            <% if (result.owners.length > 0) { result.owners.forEach(function(data) { %>
+            <% if (result.members.length > 0) { result.members.forEach(function(data) { %>
             <tr> 
                 <td>
                      <%= data.firstname + " " + data.lastname %> 
                 </td>
+                <% if (data.id === result.owner.id) { %>
+                    <td>
+
+                    </td>
+                <% } else { %>
                  <td>
-                    <a href="/home/deleteaccount/<%= data.id %>" class="link-danger"><i class="fas fa-trash ps-4">Delete</i></a>
-                 </td>   
+                    <a href="/home/deletemember/<%= result.id %>/<%= data.id %>" class="link-danger"><i class="fas fa-trash ps-4">Delete</i></a>
+                 </td>
+                <% } %>    
             </tr>
             <% }) %>
             <% } else { %>
                 <tr>
-                    <td class="text-center text-danger" colspan="2">Oops... There isn't any account for this user.
-                        <br />Please create an account first by filling the form located above table<br /><br/>
+                    <td class="text-center text-danger" colspan="2">Oops... There isn't any member for this account.
                     </td>
                 </tr>
             <% } %>
     
     </tbody>
     </table>
+    <a href="/home/addmember/<%= result.id %>">
+        <button type="button" class="btn btn-primary mb-3">Add Member</button>
+    </a>
 </div> 
 </div>

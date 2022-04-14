@@ -16,10 +16,10 @@ module.exports = async (req, res, proceed) => {
     if(result){
       //find account details with owners details associated with the transaction
       let record = await Account.findOne({ id: result.owneraccount })
-       .populate('owners');
+       .populate('members');
       let uid = false;
       //loops through owners
-      for (data of record.owners) {
+      for (data of record.members) {
         console.log(data.id);
         //matches owner ids with logged in user
         if (data.id === req.userData.userId) {

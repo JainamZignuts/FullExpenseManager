@@ -15,9 +15,11 @@ module.exports = {
       type: 'number',
       defaultsTo: 0,
     },
-
+    owner: {
+      model: 'users'
+    },
     //reference to User
-    owners: {
+    members: {
       collection: 'users',
       via: 'account',
       through: 'accountuser',

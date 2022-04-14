@@ -40,8 +40,8 @@ getParticularAccount = async (req, res) => {
     //get particular account's details along with its transactions and owners.
     let result = await Account.findOne({ id: req.params.accid })
        .populate('owners', { select: ['firstname', 'lastname', 'email'] })
-       .populate('transactions');
-       console.log(result);
+       .populate('transactions', {sort: 'createdAt DESC'});
+    console.log(result);
     res.status(rescode.OK);
     res.view('pages/accountDetails', {result});
   } catch (error) {

@@ -1,8 +1,40 @@
+<!-- <script>
+    $(document).ready(function() {
+        $("input[name$='btnradio']").click(function() {
+            $("div.trans").hide();
+            $("div.member").show();
+        });
+    });
+</script> -->
+<script type="text/javascript">
+    function show(){
+        document.getElementById('member').style.display = 'none';
+        document.getElementById('trans').style.display = 'block';
+    }
+    function show2(){
+        document.getElementById('member').style.display = 'block';
+        document.getElementById('trans').style.display = 'none';
+    }
+</script>
 <div class="container">
-    <h2 class="my-5">Account Details</h2>
-    <h3>Balance = <%= result.balance %></h3>
-<table class="table">
-    <thead class="thred-dark">
+    <h2 class="my-5 text-center">Account Details</h2>
+    <div class="text-center">
+        <div class="btn-group" role="group" id="button-toggle" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" onchange="show()" autocomplete="off" checked>
+            <label class="btn fw-light btn-outline-dark" for="btnradio1">Transaction Details</label>
+          
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" onchange="show2()" autocomplete="off">
+            <label class="btn fw-light btn-outline-dark" for="btnradio2">Member Details</label>
+          </div>
+    </div>
+    <div id="trans">
+    <% if (result.balance > 0) { %>
+        <h3 class="my-3" style="color: green;">Balance : <%= result.balance %></h3>
+    <% } else { %>
+        <h3 class="my-3" style="color: red;">Balance : <%= result.balance %></h3>
+    <% } %>
+<table class="table table-bordered border-dark">
+    <thead class="thred-dark fw-bolder">
         <tr>
             <th scope="col">Date</th>
             <th scope="col">Type</th>
@@ -27,10 +59,10 @@
                 <%= data.amount %>
             </td>
             <td>
-                <a href="/home/updateaccount/<%= data.id %>" class="link-info"><i class="far fa-edit">Edit</i></a>                                 
+                <a href="/home/transaction/update/<%= data.id %>" class="link-info"><i class="far fa-edit">Edit</i></a>                                 
             </td>
              <td>
-                <a href="/home/deleteaccount/<%= data.id %>" class="link-danger"><i class="fas fa-trash ps-4">Delete</i></a>
+                <a href="/home/transaction/delete/<%= data.id %>" class="link-danger"><i class="fas fa-trash ">Delete</i></a>
              </td>  
         </tr>
         <% }) %>
@@ -47,5 +79,34 @@
 <a href="/home/transaction/create/<%= result.id %>">
 <button type="button" class="btn btn-primary mb-3">Create Transaction</button>
 </a>
-</form>
+</div>
+<div id="member" style="display: none;">
+    <table class="table">
+        <thead class="thred-dark">
+            <tr>
+                <th colspan="2">Member-Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (result.owners.length > 0) { result.owners.forEach(function(data) { %>
+            <tr> 
+                <td>
+                     <%= data.firstname + " " + data.lastname %> 
+                </td>
+                 <td>
+                    <a href="/home/deleteaccount/<%= data.id %>" class="link-danger"><i class="fas fa-trash ps-4">Delete</i></a>
+                 </td>   
+            </tr>
+            <% }) %>
+            <% } else { %>
+                <tr>
+                    <td class="text-center text-danger" colspan="2">Oops... There isn't any account for this user.
+                        <br />Please create an account first by filling the form located above table<br /><br/>
+                    </td>
+                </tr>
+            <% } %>
+    
+    </tbody>
+    </table>
+</div> 
 </div>

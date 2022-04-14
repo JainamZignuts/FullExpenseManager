@@ -28,21 +28,25 @@ module.exports = async (req, res, proceed) => {
     //matching both token
     if (token !== tokendb) {
       //if token mismatches
-      return res.status(rescode.BAD_REQUEST).json({
-        message: msg1('TokenMismatched', lang),
-      });
+      res.status(rescode.BAD_REQUEST);
+      res.redirect('/login');
+      // .json({
+      //   message: msg1('TokenMismatched', lang),
+      // });
     } else {
       return proceed();
     }
   } catch (err) {
     //if token expired
     if (err instanceof jwt.TokenExpiredError) {
-      return res.send(msg1('TokenExpired', lang));
+      // return res.send(msg1('TokenExpired', lang));
+      return res.redirect('/login');
     } else {
-      return res.status(rescode.UNAUTHORIZED).json({
-        hi:err,
-        message: msg1('AuthError', lang),
-      });
+      res.status(rescode.UNAUTHORIZED);
+      // .json({
+      //   message: msg1('AuthError', lang),
+      // });
+      res.redirect('/login');
     }
   }
 };

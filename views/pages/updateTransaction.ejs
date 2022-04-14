@@ -6,11 +6,11 @@
         <div class="mb-3">
           <label for="type" class="form-label">Transaction Type</label>
           <select class="form-select" name="type" id="type">
-            <option value="<%= record.type %> " selected><%= record.type %> </option>
+            <option value="<%= record.type %>" selected><%= record.type %> </option>
             <% if(record.type === "expense"){%>
-                <option value="Income">Income</option>
+                <option value="income">Income</option>
                 <%} else{%>
-                <option value="Expense">Expense</option>
+                <option value="expense">Expense</option>
                 <% } %>
           </select>
         </div>

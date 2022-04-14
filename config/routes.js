@@ -53,6 +53,7 @@ module.exports.routes = {
   'POST /home/transaction/create/:accid' : 'TransactionsController.createTransaction',
   'GET /home/transaction/update/:transid' : 'TransactionsController.getUpdateTransaction',
   'POST /home/transaction/update/:transid' : 'TransactionsController.updateTransaction',
+  'GET /home/transaction/delete/:transid' : 'TransactionsController.deleteTransaction',
   'GET /home/account/:accid' : 'AccountController.getParticularAccount',
 
 

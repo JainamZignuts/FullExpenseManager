@@ -77,8 +77,6 @@ createTransaction = async (req, res) => {
     //gets account's current balance
     let balance = accountData.balance;
     let { description, amount } = req.body;
-    console.log(description);
-    console.log(amount);
     const type = req.body.type.toLowerCase();
     //checks for input amount
     if(amount > 0){
@@ -111,11 +109,8 @@ createTransaction = async (req, res) => {
     //updates balance in account
     let upd = await Account.updateOne({ id: req.params.accid })
      .set({ balance: balance });
-    res.status(rescode.OK).json({
-      message: msg('TransactionCreated', lang),
-      result: result,
-      account: upd,
-    });
+    res.status(rescode.CREATED);
+    res.redirect('/home/account/'+req.params.accid);
   } catch (error) {
     res.status(rescode.SERVER_ERROR);
     res.view('500', {error});
@@ -136,10 +131,11 @@ updateTransaction = async (req, res) => {
     //gets current balance from account
     let balance = data.balance;
     let { description, amount } = req.body;
+    amount = Number(amount);
     let type = req.body.type.toLowerCase();
     console.log(type);
     //checks for input amount
-    if(amount >= 0){
+    if(amount > 0){
       amount = amount;
     } else {
       //if amount is negative sends error
@@ -186,11 +182,8 @@ updateTransaction = async (req, res) => {
     //updates balance in account
     let upd = await Account.updateOne({ id: result.owneraccount })
      .set({ balance: balance });
-    res.status(rescode.OK).json({
-      message: msg('TransactionUpdate', lang),
-      record: record,
-      upd: upd
-    });
+    res.status(rescode.OK);
+    res.redirect('/home/account/'+data.id);
   } catch (error) {
     console.log(error);
     res.status(rescode.SERVER_ERROR).json({
@@ -207,7 +200,7 @@ updateTransaction = async (req, res) => {
 deleteTransaction = async (req, res) => {
   const lang = req.getLocale();
   try {
-    let id = req.params.id;
+    let id = req.params.transid;
     let result = await Transactions.findOne({ id: id });
     let data = await Account.findOne({ id: result.owneraccount });
     //gets current balance from account
@@ -223,11 +216,8 @@ deleteTransaction = async (req, res) => {
      .set({ balance: balance });
     //deletes the transaction
     let del = await Transactions.destroyOne({ id: id });
-    res.status(rescode.OK).json({
-      message: msg('TransactionDeleted', lang),
-      account:record,
-      DeletedTransaction: del
-    });
+    res.status(rescode.OK);
+    res.redirect('/home/account/'+ data.id);
   } catch (error) {
     res.status(rescode.SERVER_ERROR).json({
       error: error

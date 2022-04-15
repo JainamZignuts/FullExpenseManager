@@ -20,13 +20,13 @@ getAccounts = async (req, res) => {
       where: { id: req.userData.userId },
       select: ['email', 'firstname', 'lastname'],
     }).populate('accounts');
+    console.log(result);
     res.status(rescode.OK);
     res.view('pages/home',{result});
   } catch (error) {
     console.log(error);
-    res.status(rescode.SERVER_ERROR).json({
-      error: error,
-    });
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
   }
 };
 
@@ -42,8 +42,18 @@ getParticularAccount = async (req, res) => {
        .populate('members', { select: ['firstname', 'lastname', 'email'] })
        .populate('owner')
        .populate('transactions', {sort: 'createdAt DESC'});
+    let rec = await Transactions.find({owneraccount:req.params.accid})
+    .sort('createdAt DESC')
+    .populate('user');
+    let record = rec.map((data) => {
+      return {
+        id: data.user.id,
+        firstname: data.user.firstname,
+        lastname: data.user.lastname
+      };
+    });
     res.status(rescode.OK);
-    res.view('pages/accountDetails', {result});
+    res.view('pages/accountDetails', {result,record});
   } catch (error) {
     console.log(error);
     res.status(rescode.SERVER_ERROR).json({

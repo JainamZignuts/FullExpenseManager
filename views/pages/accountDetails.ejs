@@ -27,6 +27,7 @@
             <label class="btn fw-light btn-outline-dark" for="btnradio2">Member Details</label>
           </div>
     </div>
+    <br>
     <div id="trans">
         <span> <h4>Owner : <%= result.owner.firstname + " " + result.owner.lastname %></h3>
     <% if (result.balance > 0) { %>
@@ -35,18 +36,20 @@
         <h5 class="my-3" style="color: red;">Balance : <%= result.balance %></h3>
     <% } %>
 </span>
-<table class="table table-bordered border-dark">
-    <thead class="thred-dark fw-bolder">
+<table class="table table-striped table-border">
+    <thead class="bg-dark text-white fw-bolder">
         <tr>
             <th scope="col">Date</th>
             <th scope="col">Type</th>
             <th scope="col">Description</th>
             <th scope="col">Amount</th>
+            <th scope="col">Created By</th>
             <th colspan="2" class="text-center">Action</th>
         </tr>
     </thead>
     <tbody>
         <% if(result.transactions.length > 0) { result.transactions.forEach(function(data) { %> 
+            
         <tr> 
             <td>
                 <%= new Date(data.createdAt).toLocaleString() %> 
@@ -61,17 +64,26 @@
                 <%= data.amount %>
             </td>
             <td>
+                <% for (let elem of record) { %>
+                    <% if (elem.id === data.user) { %>
+                        <%= elem.firstname + " " + elem.lastname %> 
+                        <% break; %>
+                        <% } %>
+                <% } %>
+            </td>
+            <td>
                 <a href="/home/transaction/update/<%= data.id %>" class="link-info"><i class="far fa-edit">Edit</i></a>                                 
             </td>
              <td>
                 <a href="/home/transaction/delete/<%= data.id %>" class="link-danger"><i class="fas fa-trash ">Delete</i></a>
              </td>  
         </tr>
+        
         <% }) %>
         <% } else { %>
             <tr>
-                <td class="text-center text-danger" colspan="6">Oops... There isn't any Transactios in this account.
-                    <br />Please create a Transaction first by clicking add transaction button. <br /><br/>
+                <td class="text-center text-danger py-4" colspan="6">Oops... There isn't any Transactios in this account.
+                    <br />Please create a Transaction first by clicking add transaction button.
                 </td>
             </tr>
         <% } %> 
@@ -87,15 +99,26 @@
         <thead class="thred-dark">
             <tr>
                 <th colspan="2">Member-Name</th>
+                <th scope="col">Role</th>
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
             <% if (result.members.length > 0) { result.members.forEach(function(data) { %>
             <tr> 
-                <td>
+                <td colspan="2">
                      <%= data.firstname + " " + data.lastname %> 
                 </td>
-                <% if (data.id === result.owner.id) { %>
+                <% if (data.id === req.userData.userId && data.id === result.owner.id) { %>
+                    <td>You (Owner)</td>
+                <% } else if (data.id === req.userData.userId) { %>
+                    <td>You</td>
+                <% } else if (data.id === result.owner.id) { %>
+                    <td>Owner</td>
+                <% } else { %>
+                    <td>Member</td>
+                <% } %>
+                <% if (data.id === result.owner.id || data.id === req.userData.userId) { %>
                     <td>
 
                     </td>

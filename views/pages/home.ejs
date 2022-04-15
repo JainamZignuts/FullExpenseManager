@@ -24,9 +24,14 @@
             <td>
                 <a href="/home/updateaccount/<%= data.id %>" class="link-info"><i class="far fa-edit">Edit</i></a>                                 
             </td>
+            <% if (req.userData.userId === data.owner) { %>
              <td>
                 <a href="/home/deleteaccount/<%= data.id %>" class="link-danger"><i class="fas fa-trash ps-4">Delete</i></a>
              </td>  
+            <% } else { %>
+                <td>
+                </td>
+            <% } %>
             <td>
                 <a href="/home/account/<%= data.id %>" class="btn btn-primary btn-sm mx-4"  type="submit" role="button">More Details <i class="fas fa-angle-double-right"></i></a>
             </td>

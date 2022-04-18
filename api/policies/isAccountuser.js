@@ -38,14 +38,13 @@ module.exports = async (req, res, proceed) => {
         });
       }
     } else {
-      return res.status(rescode.NOT_FOUND).json({
-        error: msg1('AccountNotFound', lang)
-      });
+      req.addFlash('error', msg1('AccountNotFound', lang));
+      res.status(rescode.NOT_FOUND);
+      return res.redirect('/home');
     }
   } catch (err) {
     console.log(err);
-    return res.status(rescode.UNAUTHORIZED).json({
-      message: msg1('AuthError', lang),
-    });
+    res.status(rescode.UNAUTHORIZED);
+    res.redirect('/login');
   }
 };

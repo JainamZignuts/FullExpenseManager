@@ -29,6 +29,12 @@ getAddMember = async (req, res) => {
 addMembers = async (req, res) => {
   const lang = req.getLocale();
   try {
+    let pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!pattern.test(req.body.email)) {
+      req.addFlash('error', msg1('InvalidEmail', lang));
+      res.status(rescode.BAD_REQUEST);
+      return res.redirect(req.url);
+    }
     let record = await Users.findOne({ email: req.body.email });
     if (record) {
       //if user found
@@ -39,28 +45,28 @@ addMembers = async (req, res) => {
       });
       if (data) {
         //if given user is member of thst account already
-        res.status(rescode.CONFLICT).json({
-          message: msg1('MemberExists', lang),
-        });
+        req.addFlash('error', msg1('MemberExists', lang));
+        res.status(rescode.CONFLICT);
+        return res.redirect(req.url);
       } else {
         //adds user to the account as member
         await Account.addToCollection(req.params.accid, 'members').members([
           record.id,
         ]);
+        req.addFlash('success', msg1('MemberAdded', lang));
         res.status(rescode.CREATED);
         res.redirect('/home/account/'+req.params.accid);
       }
     } else {
       //user does not exists in database
-      return res.status(rescode.NOT_FOUND).json({
-        error: msg1('UserNotExists', lang),
-      });
+      req.addFlash('error', msg1('UserNotExists', lang));
+      res.status(rescode.NOT_FOUND);
+      return res.redirect(req.url);
     }
   } catch (error) {
     console.log(error);
-    res.status(rescode.SERVER_ERROR).json({
-      error: error,
-    });
+    res.status(rescode.SERVER_ERROR);
+    res.view('500',{error});
   }
 };
 
@@ -86,25 +92,25 @@ deleteMembers = async (req, res) => {
         await Account.removeFromCollection(req.params.accid, 'members').members([
           record.id,
         ]);
+        req.addFlash('success', msg1('MemberDeleted', lang));
         res.status(rescode.OK);
         res.redirect('/home/account/'+req.params.accid);
       } else {
         //given user is not the member of that accoount
-        res.status(rescode.NOT_FOUND).json({
-          message: msg('MemberNotFound', lang),
-        });
+        req.addFlash('error', msg1('MemberNotFound', lang));
+        res.status(rescode.NOT_FOUND);
+        return res.redirect(req.url);
       }
     } else {
       //user does not exists in database
-      return res.status(rescode.NOT_FOUND).json({
-        error: msg('UserNotExists', lang),
-      });
+      req.addFlash('error', msg1('UserNotExists', lang));
+      res.status(rescode.NOT_FOUND);
+      return res.redirect(req.url);
     }
   } catch (error) {
     console.log(error);
-    res.status(rescode.SERVER_ERROR).json({
-      error: error,
-    });
+    res.status(rescode.SERVER_ERROR);
+    res.view('500',{error});
   }
 };
 

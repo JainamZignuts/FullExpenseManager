@@ -1,0 +1,13 @@
+<% flash.get('success').forEach(function (message) { %>
+    <div class="alert alert-success alert-dismissible fade show m-3" style="border-radius: 50px;" role="alert">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+<% }) %>
+
+<% flash.get('error').forEach(function (message) { %>
+    <div class="alert alert-danger  alert-dismissible fade show m-3" style="border-radius: 50px;" role="alert">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+<% }) %>

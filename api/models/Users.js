@@ -18,6 +18,10 @@ module.exports = {
       required: true,
       minLength: 8,
     },
+    isActive: {
+      type: 'boolean',
+      defaultsTo: false
+    },
     token: {
       type: 'string',
       allowNull: true

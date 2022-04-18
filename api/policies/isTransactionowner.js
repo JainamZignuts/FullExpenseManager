@@ -44,8 +44,7 @@ module.exports = async (req, res, proceed) => {
       });
     }
   } catch (error) {
-    return res.status(rescode.UNAUTHORIZED).json({
-      message: msg1('AuthError', lang),
-    });
+    res.status(rescode.UNAUTHORIZED);
+    res.redirect('/login');
   }
 };

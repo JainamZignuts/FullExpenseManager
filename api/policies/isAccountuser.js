@@ -10,6 +10,10 @@ const msg1 = sails.config.getMessages;
 module.exports = async (req, res, proceed) => {
   const lang = req.getLocale();
   try {
+    let admin = await Admin.findOne({id:req.userData.userId});
+    if(admin) {
+      return proceed();
+    }
     const id = req.params.accid;
     //finds account details with owners
     let rec = await Account.findOne({ id: id }).populate('members');

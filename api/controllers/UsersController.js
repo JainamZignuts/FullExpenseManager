@@ -112,7 +112,7 @@ userLogin = async (req, res) => {
           process.env.JWT_KEY,
           //expiration time
           {
-            expiresIn: '1h',
+            expiresIn: '2h',
           }
         );
         //updating token for user

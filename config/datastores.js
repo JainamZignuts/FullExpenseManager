@@ -49,10 +49,11 @@ module.exports.datastores = {
     *                                                                          *
     ***************************************************************************/
     adapter: 'sails-mongo',
-    url: process.env.dburl
-    // url: 'mongodb+srv://Jainam:Jainam@cluster0.vs3zp.mongodb.net/cluster0?retryWrites=true&w=majority',
+    // url: process.env.dburl
+    url: 'mongodb+srv://Jainam:Jainam@cluster0.vs3zp.mongodb.net/cluster0?retryWrites=true&w=majority',
 
   },
 
 
 };
+

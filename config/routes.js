@@ -37,6 +37,12 @@ module.exports.routes = {
       layout: 'layouts/prelayout'
     }
   },
+  '/contactus': {
+    view: 'pages/contactUs',
+    locals: {
+      layout: 'layouts/prelayout'
+    }
+  },
   'GET /logout' : 'UsersController.userLogout',
   '/home': { view: 'pages/home' },
   '/home/updateaccount': { view: 'pages/updateAccount' },

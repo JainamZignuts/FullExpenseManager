@@ -14,6 +14,7 @@
 	"UserDeleted": "User deleted successfully",
 	"Login": "Logged in successfully.",
 	"Logout": "Logged out successfully.",
+	"ContactUs": "Message sent.",
 	"TokenMismatched": "Token mismatched! Please Login.",
 	"TokenExpired": "Token expired! \n Please login again.",
 	"AccessDenied": "Access Denied.",

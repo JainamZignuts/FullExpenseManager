@@ -43,6 +43,7 @@ module.exports.routes = {
       layout: 'layouts/prelayout'
     }
   },
+  'POST /contactus' : 'ContactusController.contactUs',
   'GET /logout' : 'UsersController.userLogout',
   '/home': { view: 'pages/home' },
   '/home/updateaccount': { view: 'pages/updateAccount' },

@@ -16,24 +16,37 @@ userSignup = async (req, res) => {
     //check for existing user
     let user = await Users.findOne({ email: req.body.email });
     let pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (user) {
-      //if user found
-      return res.status(rescode.CONFLICT).json({
-        // message: msg.DuplicateEmail,
-        message: msg1('DuplicateEmail', lang),
-      });
-      //checks for password length
-    } else if (req.body.password.length < 8) {
-      return res.status(400).json({
-        message: msg1('MinPasswordLength', lang),
-      });
+    if (req.body.firstname.trim().length <= 0) {
       //checks for empty input field
-    } else if (req.body.firstname.trim().length <= 0) {
-      return res.send(msg1('EmptyFirstName', lang));
+      req.addFlash('error', msg1('EmptyFirstName', lang));
+      res.status(rescode.BAD_REQUEST);
+      return res.redirect('/signup');
+
+
     } else if (req.body.lastname.trim().length <= 0) {
-      return res.send(msg1('EmptyLastName'), lang);
+      //checks for empty input field
+      req.addFlash('error', msg1('EmptyLastName', lang));
+      res.status(rescode.BAD_REQUEST);
+      return res.redirect('/signup');
+
+
     } else if (!pattern.test(req.body.email)) {
-      return res.badRequest(msg1('InvalidEmail', lang));
+      req.addFlash('error', msg1('InvalidEmail', lang));
+      res.status(rescode.BAD_REQUEST);
+      return res.redirect('/signup');
+
+    } else if (user) {
+      //if user found
+      req.addFlash('error', msg1('DuplicateEmail', lang));
+      res.status(rescode.CONFLICT);
+      return res.redirect('/signup');
+
+    } else if (req.body.password.length < 8) {
+      //checks for password length
+      req.addFlash('error', msg1('MinPasswordLength', lang));
+      res.status(rescode.BAD_REQUEST);
+      return res.redirect('/signup');
+
     } else {
       //calling helper to hash the password
       let hash = await sails.helpers.hashPassword.with({
@@ -46,8 +59,9 @@ userSignup = async (req, res) => {
         email: req.body.email,
         password: hash,
       }).fetch();
+      req.addFlash('success', msg1('UserCreated', lang));
       res.status(rescode.CREATED);
-      res.redirect('/login');
+      return res.redirect('/login');
       // res.send(
       //       msg1('UserCreated', lang) +
       //         '\n' +
@@ -58,9 +72,8 @@ userSignup = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(rescode.SERVER_ERROR).json({
-      error: error.toString(),
-    });
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
   }
 };
 
@@ -76,16 +89,16 @@ userLogin = async (req, res) => {
     let users = await Users.findOne({ email: req.body.email });
     if (!users) {
       //user not in database
-      return res.status(rescode.UNAUTHORIZED).json({
-        message: msg1('AuthError', lang),
-      });
+      req.addFlash('error', msg1('InvalidEmailPassword', lang));
+      res.status(rescode.UNAUTHORIZED);
+      return res.redirect('/login');
     }
     //comparing passwords
     bcrypt.compare(req.body.password, users.password, async (err, result) => {
       if (err) {
-        return res.status(rescode.UNAUTHORIZED).json({
-          message: msg1('AuthError', lang),
-        });
+        req.addFlash('error', msg1('InvalidEmailPassword', lang));
+        res.status(rescode.UNAUTHORIZED);
+        return res.redirect('/login');
       }
       if (result) {
         //generating token
@@ -99,29 +112,30 @@ userLogin = async (req, res) => {
           process.env.JWT_KEY,
           //expiration time
           {
-            expiresIn: '1h',
+            expiresIn: '2h',
           }
         );
         //updating token for user
         await Users.updateOne({ id: users.id }).set({
+          isActive: true,
           token: token,
         });
         res.cookie('token', token, { maxAge:  7*24*60*60*1000});
+        req.addFlash('success', msg1('Login', lang));
         return res.redirect('/home');
         // return res.status(rescode.OK).json({
         //   message: msg1('Login', lang),
         //   token: token,
         // });
       }
-      res.status(rescode.UNAUTHORIZED).json({
-        message: msg1('AuthError', lang),
-      });
+      req.addFlash('error', msg1('InvalidEmailPassword', lang));
+      res.status(rescode.UNAUTHORIZED);
+      return res.redirect('/login');
     });
   } catch (error) {
     console.log(error);
-    res.status(rescode.SERVER_ERROR).json({
-      error: error,
-    });
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
   }
 };
 
@@ -135,18 +149,19 @@ userLogout = async (req, res) => {
   try {
     //update token value to null in user's data
     await Users.updateOne({ id: req.userData.userId }).set({
+      isActive: false,
       token: null,
     });
     res.clearCookie('token');
-    res.redirect('/');
+    req.addFlash('success', msg1('Logout', lang));
+    return res.redirect('/');
     // res.status(rescode.OK).json({
     //   message: msg1('Logout', lang),
     // });
   } catch (error) {
     console.log(error);
-    res.status(rescode.SERVER_ERROR).json({
-      error: error,
-    });
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
   }
 };
 

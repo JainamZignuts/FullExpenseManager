@@ -10,6 +10,10 @@ const msg1 = sails.config.getMessages;
 module.exports = async (req, res, proceed) => {
   const lang = req.getLocale();
   try {
+    let admin = await Admin.findOne({id:req.userData.userId});
+    if(admin) {
+      return proceed();
+    }
     const id = req.params.accid;
     //finds account details with owners
     let rec = await Account.findOne({ id: id }).populate('members');
@@ -38,14 +42,13 @@ module.exports = async (req, res, proceed) => {
         });
       }
     } else {
-      return res.status(rescode.NOT_FOUND).json({
-        error: msg1('AccountNotFound', lang)
-      });
+      req.addFlash('error', msg1('AccountNotFound', lang));
+      res.status(rescode.NOT_FOUND);
+      return res.redirect('/home');
     }
   } catch (err) {
     console.log(err);
-    return res.status(rescode.UNAUTHORIZED).json({
-      message: msg1('AuthError', lang),
-    });
+    res.status(rescode.UNAUTHORIZED);
+    res.redirect('/login');
   }
 };

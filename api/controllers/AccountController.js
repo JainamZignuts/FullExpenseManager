@@ -20,7 +20,6 @@ getAccounts = async (req, res) => {
       where: { id: req.userData.userId },
       select: ['email', 'firstname', 'lastname'],
     }).populate('accounts');
-    console.log(result);
     res.status(rescode.OK);
     res.view('pages/home',{result});
   } catch (error) {
@@ -56,9 +55,8 @@ getParticularAccount = async (req, res) => {
     res.view('pages/accountDetails', {result,record});
   } catch (error) {
     console.log(error);
-    res.status(rescode.SERVER_ERROR).json({
-      error: error,
-    });
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
   }
 };
 
@@ -76,7 +74,9 @@ createAccount = async (req, res) => {
     if(accname.length > 0){
       accname = accname;
     } else {
-      return res.send(msg1('EmptyAccountName', lang));
+      req.addFlash('error', msg1('EmptyAccountName', lang));
+      res.status(rescode.BAD_REQUEST);
+      return res.redirect('/home');
     }
     //creates an account
     let result = await Account.create({
@@ -88,20 +88,27 @@ createAccount = async (req, res) => {
     //   message: msg('AccountCreated', lang),
     //   result,
     // });
+    req.addFlash('success', msg1('AccountCreated', lang));
+    res.status(rescode.CREATED);
     res.redirect('/home');
   } catch (error) {
     console.log(error);
-    res.status(rescode.SERVER_ERROR).json({
-      error: error,
-    });
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
   }
 };
 
 getUpdateAccount = async (req, res) => {
-  const id = req.params.accid;
-  let result = await Account.findOne({id:id});
-  res.status(rescode.OK);
-  res.view('pages/updateAccount', {result});
+  try {
+    const id = req.params.accid;
+    let result = await Account.findOne({id:id});
+    res.status(rescode.OK);
+    res.view('pages/updateAccount', {result});
+  } catch (error) {
+    console.log(error);
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
+  }
 };
 
 /**
@@ -115,7 +122,9 @@ updateAccount = async (req, res) => {
     const id = req.params.accid;
     //checks for empty input value
     if(req.body.accountname.trim().length <= 0){
-      return res.send(msg1('EmptyAccountName'), lang);
+      req.addFlash('error', msg1('EmptyAccountName', lang));
+      res.status(rescode.BAD_REQUEST);
+      return res.redirect(req.url);
     }
     //updates accountname
     let result = await Account.updateOne({ id: id }).set({
@@ -125,12 +134,13 @@ updateAccount = async (req, res) => {
     //   message: msg1('AccountUpdated', lang),
     //   result,
     // });
+    req.addFlash('success', msg1('AccountUpdated', lang));
+    res.status(rescode.OK);
     res.redirect('/home');
   } catch (error) {
     console.log(error);
-    res.status(rescode.SERVER_ERROR).json({
-      error: error,
-    });
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
   }
 };
 
@@ -147,15 +157,13 @@ deleteAccount = async (req, res) => {
     let record = await Transactions.destroy({ owneraccount: id }).fetch();
     //deletes the requested account
     let result = await Account.destroyOne({ id: id });
-    // res.status(rescode.OK).json({
-    //   message: msg1('AccountDeleted', lang),
-    // });
+    req.addFlash('success', msg1('AccountDeleted', lang));
+    res.status(rescode.OK);
     res.redirect('/home');
   } catch (error) {
     console.log(error);
-    res.status(rescode.SERVER_ERROR).json({
-      error: error,
-    });
+    res.status(rescode.SERVER_ERROR);
+    res.view('500', {error});
   }
 };
 

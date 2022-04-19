@@ -10,6 +10,10 @@ const msg1 = sails.config.getMessages;
 module.exports = async (req, res, proceed) => {
   const lang = req.getLocale();
   try {
+    let admin = await Admin.findOne({id:req.userData.userId});
+    if(admin) {
+      return proceed();
+    }
     const id = req.params.transid;
     //find transaction from the id from url
     let result = await Transactions.findOne({ id: id });
@@ -44,8 +48,7 @@ module.exports = async (req, res, proceed) => {
       });
     }
   } catch (error) {
-    return res.status(rescode.UNAUTHORIZED).json({
-      message: msg1('AuthError', lang),
-    });
+    res.status(rescode.UNAUTHORIZED);
+    res.redirect('/login');
   }
 };

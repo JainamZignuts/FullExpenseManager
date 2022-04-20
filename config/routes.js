@@ -43,6 +43,12 @@ module.exports.routes = {
       layout: 'layouts/prelayout'
     }
   },
+  '/admin/dashboard': {
+    view: 'pages/admin/dashboard',
+    locals: {
+      layout: 'layouts/admin'
+    }
+  },
   'POST /contactus' : 'ContactusController.contactUs',
   'GET /logout' : 'UsersController.userLogout',
   '/home': { view: 'pages/home' },

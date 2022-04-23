@@ -1,82 +1,79 @@
-<%- partial('../../partials/adminsidenav.ejs') %>
-<div class="container-fluid">
-  <div class="row">
 
-    
-      
-      <div
-        class="d-flex justify-content-center flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom"
-      >
-        <h1 class="h2">Dashboard</h1>
-      </div>
-      <br><br>
+<%- partial('../../partials/adminsidenav.ejs') %>
+<div id="content-wrapper">
+<div class="container-fluid">
+    <%- partial('../../partials/flash.ejs') %>
+    <h1 class="h2">Dashboard</h1>
+    <!-- </div> -->
+    <br><br>
+    <div class="row">
       <style>
-        .box {
-          width: 88%;
-          height: 130px;
-          background-color: #e3e3e3;
-          margin-left: 10px;
-          padding: 10px;
-          box-shadow: 2px 5px 10px #ddd;
-          position: relative;
+        .card {
           border-radius: 15px;
         }
-        .box p {
-          color: #042b90;
-          font-weight: 500;
-          padding-left: 10px;
-        }
-        .number {
-          font-size: 35px;
-          margin-bottom: 0px;
-          margin-top: 20px;
-        }
-        .head-1 {
-          font-size: 18px !important;
-          margin: 10px 0px;
-          color: #6c7293;
-        }
-        .box-icon {
-          font-size: 20px !important;
-          margin-top: 35px !important;
-          color: #fec908;
-          padding-right: 10px;
-          background-color: #efeff5;
-          padding: 15px;
-          border-radius: 25px;
+        .card-body-icon {
           position: absolute;
-          right: 16px;
-          top: -18px;
+          z-index: 0;
+          top: -0.25rem;
+          right: 0rem;
+          opacity: 0.4;
+          font-size: 4rem;
+          -webkit-transform: rotate(15deg);
+          transform: rotate(15deg);
         }
       </style>
-      <div class="row pt-5">
-        <div class="col col-md-2"></div>
-        <div class="col col-div-4-1">
-          <div class="box">
-            <p class="head-1">Total Users</p>
-            <p class="number">67343</p>
-            <i class="fas fa-users box-icon"></i>
-          </div>
-        </div>
-        <div class="col col-div-4-1">
-          <div class="box">
-            <p class="head-1">Total Accounts</p>
-            <p class="number">2343</p>
-            <i class="fas fa-file-invoice box-icon"></i>
-          </div>
-        </div>
-        <div class="col col-div-4-1">
-          <div class="box">
-            <p class="head-1">Total Transactions</p>
-            <p class="number">35343</p>
-            <i class="fas fa-coins box-icon"></i>
-          </div>
-        </div>
-      </div>
-      <br><br>
-      <div class="clearfix"></div>
 
-      
-    
+
+      <div class="col-xl-4 col-sm-4 my-3 d-flex justify-content-center">
+        <div class="card text-white o-hidden h-100 w-75" style="background-color: #042b90;">
+            <div class="card-body">
+                <div class="card-body-icon">
+                    <i class="fas fa-users box-icon"></i>
+                </div>
+                <div class="mr-5">Total Users</div>
+            </div>
+            <div class="text-white text-center card-footer clearfix small z-1">
+                <span class="float-left"><%= users %></span>
+                <span class="float-right">
+                    <i class="fas fa-users box-icon"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4 col-sm-4 my-3 d-flex justify-content-center">
+      <div class="card text-white o-hidden h-100 w-75" style="background-color: #10cc20d5;">
+          <div class="card-body">
+              <div class="card-body-icon">
+                  <i class="fas fa-file-invoice box-icon"></i>
+              </div>
+              <div class="mr-5">Total Accounts</div>
+          </div>
+          <div class="text-white text-center card-footer clearfix small z-1">
+              <span class="float-left"><%= accounts %></span>
+              <span class="float-right">
+                  <i class="fas fa-file-invoice box-icon"></i>
+              </span>
+          </div>
+      </div>
   </div>
+
+  <div class="ccol-xl-4 col-sm-4 my-3 d-flex justify-content-center">
+    <div class="card text-white o-hidden h-100 w-75" style="background-color: orange;">
+        <div class="card-body">
+            <div class="card-body-icon">
+                <i class="fas fa-coins box-icon"></i>
+            </div>
+            <div class="mr-5">Total Transactions</div>
+        </div>
+        <div class="text-white text-center card-footer clearfix small z-1">
+            <span class="float-left"><%= transactions %></span>
+            <span class="float-right">
+                <i class="fas fa-coins box-icon"></i>
+            </span>
+        </div>
+    </div>
+</div>
+  </div>
+</div>
 </div>

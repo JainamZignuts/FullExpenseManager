@@ -18,6 +18,10 @@ module.exports.policies = {
   ***************************************************************************/
 
   '*': 'getLang',
+  AdminController: {
+    '*': ['getLang','isAdmin'],
+    'adminLogin': true
+  },
   UsersController: {
     'userLogout' : ['getLang','isAuthenticated'],
   },

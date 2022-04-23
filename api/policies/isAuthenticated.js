@@ -19,15 +19,10 @@ module.exports = async (req, res, proceed) => {
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     req.userData = decoded;
 
-    let admin = await Admin.findOne({ id: req.userData.userId});
-    if(admin){
-      tokendb = admin.token;
-    } else {
     //finds user by id got from token
       let result = await Users.findOne({ id: req.userData.userId });
       //stores token from user's database
       tokendb = result.token;
-    }
     //matching both token
     if (token !== tokendb) {
       //if token mismatches

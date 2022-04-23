@@ -1,0 +1,93 @@
+<%- partial('../../partials/adminsidenav.ejs') %>
+<div id="content-wrapper">
+<div class="container-fluid">
+<div class="row">
+    <%- partial('../../partials/flash.ejs') %>
+    <h1 class="h2 my-2 text-center">Accounts</h1>
+    
+    <br><br>
+    <div class="col xl-1"></div>
+    <div class="col-xl-10 my-3 d-flex justify-content-center">
+    <table class="table table-striped border-dark table-hover" style="background-color: rgba(202, 222, 202, 0.568);">
+        <thead class="thred-dark" style="background-color: royalblue;">
+            <tr>
+                <th scope="col">Account Name</th>
+                <th scope="col" >Balance</th>
+                <th colspan="2" >Owner</th>
+                <th colspan="2" class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if(accounts.length > 0) { accounts.forEach(function(data) { %> 
+            <tr> 
+                <td>
+                    <%= data.accountname %> 
+                </td>
+                <% if (data.balance > 0 ) { %>
+                    <td style="color: green;">
+                       <%= data.balance %>
+                    </td>  
+                <% } else { %>
+                    <td style="color: red;">
+                        <%= data.balance %>
+                    </td>
+                <% } %>
+                <td colspan="2">
+                    <%= data.owner.firstname + " " + data.owner.lastname %>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#myModal<%= data.id %>"><a class="link-info"><i class="far fa-edit">Edit</i></a></button>                                 
+                </td>
+                <% if (req.adminData.superAdmin === true) { %>
+                    <td>
+                        <button type="button" class="btn"><a href="/admin/deleteaccount/<%= data.id %>" class="link-danger"><i class="fas fa-trash">Delete</i></a></button>
+                     </td>
+                <% } else { %>   
+                    <td>
+                    </td>
+                <% } %>
+            </tr>
+            <!-- Modal -->
+            <div id="myModal<%= data.id %>" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+              
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Update Account</h4>
+                        <!-- <button type="button" class="close" data-bs-dismiss="modal">&times;</button> -->
+                    </div>
+                    <div class="modal-body">
+                        <form class="mx-1 mx-md-4" action="/admin/updataccount/<%= data.id %>" method="POST"> 
+                            <div class="d-flex flex-row align-items-center mb-4">
+                              
+                              <div class="form-outline flex-fill mb-0">
+                                  <label>Account Name</label>
+                                <input type="text" id="validationDefault01"  name="accountname" class="form-control" value="<%= data.accountname %>" required />
+                              </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="submit-button btn-primary" type="submit">Update</button>
+                    </form>  
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+              
+                </div>
+              </div>
+            <% }) %>
+            <% } else { %>
+                <tr>
+                    <td class="text-center text-danger" colspan="6">Oops... There isn't any Accounts created yet in this application.
+                    </td>
+                </tr>
+            <% } %> 
+    
+    </tbody>
+    </table>
+    </div>
+    <div class="col-xl-1"></div>
+    </div>
+</div>
+</div>

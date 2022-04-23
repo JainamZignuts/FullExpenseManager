@@ -19,6 +19,7 @@ module.exports = {
     email: {
       type: 'string',
       required: true,
+      unique: true,
       isEmail: true,
     },
     password: {
@@ -32,7 +33,11 @@ module.exports = {
     isSuperAdmin: {
       type: 'boolean',
       defaultsTo: false
-    }
+    },
+    isActive: {
+      type: 'boolean',
+      defaultsTo: false
+    },
   },
 
 };

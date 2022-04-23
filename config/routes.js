@@ -43,12 +43,13 @@ module.exports.routes = {
       layout: 'layouts/prelayout'
     }
   },
-  '/admin/dashboard': {
-    view: 'pages/admin/dashboard',
+  '/admin/login': {
+    view: 'pages/admin/login',
     locals: {
-      layout: 'layouts/admin'
+      layout: 'layouts/prelayout'
     }
   },
+  
   'POST /contactus' : 'ContactusController.contactUs',
   'GET /logout' : 'UsersController.userLogout',
   '/home': { view: 'pages/home' },
@@ -69,6 +70,22 @@ module.exports.routes = {
   'POST /home/transaction/update/:transid' : 'TransactionsController.updateTransaction',
   'GET /home/transaction/delete/:transid' : 'TransactionsController.deleteTransaction',
   'GET /home/account/:accid' : 'AccountController.getParticularAccount',
+
+  'POST /admin/login' : 'AdminController.adminLogin',
+  'GET /admin/logout' : 'AdminController.adminLogout',
+  'GET /admin/dashboard' : 'AdminController.getAll',
+  'GET /admin/users' : 'AdminController.getUsers',
+  'GET /admin/accounts' : 'AdminController.getAccounts',
+  'GET /admin/transactions' : 'AdminController.getTransactions',
+  'GET /admin/subAdminList' : 'AdminController.getSubAdmin',
+  'POST /admin/createsubadmin' : 'AdminController.createSubAdmin',
+  'GET /admin/deletesubadmin/:aid' : 'AdminController.deleteSubAdmin',
+  'POST /admin/updateuser/:uid' : 'AdminController.userUpdate',
+  'GET /admin/deleteuser/:uid' : 'AdminController.userDelete',
+  'POST /admin/updataccount/:accid' : 'AdminController.accountUpdate',
+  'GET /admin/deleteaccount/:accid' : 'AdminController.accountDelete',
+  'POST /admin/updatetransaction/:transid' : 'AdminController.transactionUpdate',
+  'GET /admin/deletetransaction/:transid' : 'AdminController.transactionDelete',
 
 
   /***************************************************************************

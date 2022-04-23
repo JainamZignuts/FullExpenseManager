@@ -148,9 +148,11 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     cors: {
-      // allowOrigins: [
-      //   'https://example.com',
-      // ]
+      allowOrigins: [
+        'https://example.com',
+        "http://www.mydeployedapp.com",
+        "http://mydeployedapp.com"
+      ]
     },
 
   },
